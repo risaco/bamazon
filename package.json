@@ -1,0 +1,29 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "An Amazon-like app that uses node.js and MySQL to take customer orders and deplete store inventory. ",
+  "main": "bamazon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/risaco/bamazon.git"
+  },
+  "keywords": [
+    "bamazon",
+    "node",
+    "MySQL"
+  ],
+  "author": "risaco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/risaco/bamazon/issues"
+  },
+  "homepage": "https://github.com/risaco/bamazon#readme",
+  "dependencies": {
+    "console.table": "^0.9.1",
+    "inquirer": "^3.2.3",
+    "mysql": "^2.14.1"
+  }
+}

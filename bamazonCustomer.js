@@ -20,28 +20,33 @@ connection.connect(function(err) {
 });
 
 
-// Print List of all itemes for sale, ask user which item and qty
-connection.query("SELECT * FROM bamazon.products", function(err, res){
-	if (err) throw err;
-	printList(res);
-
-  inquirer.prompt([
-    {
-      name: 'itemNumber',
-      message: "Which item would you like to buy? (ID)"
-    },{
-      name: 'quantity',
-      message: 'How many would you like to purchase?'
-    }
-    ]).then(function(answers) {
-      var itemId = parseFloat(answers.itemNumber);
-      var itemQty = parseFloat(answers.quantity);
-
-      checkStock(itemId, itemQty);
-  });
-});
+placeOrder();
 
 // ***** FUNCTIONS *****
+
+function placeOrder(){
+  // Print List of all itemes for sale, ask user which item and qty
+  connection.query("SELECT * FROM bamazon.products", function(err, res){
+    if (err) throw err;
+    printList(res);
+
+    inquirer.prompt([
+      {
+        name: 'itemNumber',
+        message: "Which item would you like to buy? (ID)"
+      },{
+        name: 'quantity',
+        message: 'How many would you like to purchase?'
+      }
+      ]).then(function(answers) {
+        var itemId = parseFloat(answers.itemNumber);
+        var itemQty = parseFloat(answers.quantity);
+
+        checkStock(itemId, itemQty);
+    });
+  });
+
+} // END of placeOrder function
 
 
 function printList(res){
@@ -78,9 +83,37 @@ function checkStock(itemNumber, quantity){
           if (err) throw err;
 
           console.log("\nYour order is complete. Total due: " + orderTotal);
+          orderAgain();
       });
     } else {
-      console.log("Insufficient quantity!");
+      console.log("\nInsufficient quantity! This order cannot be processed.");
+
+      orderAgain();
     }
   });
+} // END of checkStock function
+
+// << Ask if user would like to plance another order >>
+function orderAgain(){
+
+  inquirer.prompt([
+  {
+    type: 'list',
+    name: 'anotherOrder',
+    message: '\nWould you like to place another order?',
+    choices: ['YES', 'NO']
+  }
+  ]).then(function(answers){
+
+    if (answers.anotherOrder === 'YES'){
+      
+      console.log("\nLet's place another order!");
+      placeOrder();
+    }
+    else {
+      console.log("\nThank you for shopping with Bamazon!");
+
+      connection.end();
+    }
+  })  
 }
